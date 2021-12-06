@@ -1,0 +1,343 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-alpha3/dist/css/bootstrap.min.css" rel="stylesheet">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/css/bootstrap-datepicker.min.css">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-alpha3/dist/js/bootstrap.bundle.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/js/bootstrap-datepicker.min.js"></script>
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+        <meta name="description" content="" />
+        <meta name="author" content="" />
+        <title>events site</title>
+        <!-- Favicon-->
+        <link rel="icon" type="image/x-icon" href="assets/favicon.ico" />
+        <!-- Bootstrap icons-->
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css" rel="stylesheet" />
+        <!-- Core theme CSS (includes Bootstrap)-->
+        <link href="{% static 'css/styles.css'%}" rel="stylesheet" />
+        <style>
+            
+            .button {
+              background-color: #4CAF50;
+              border: none;
+              color: white;
+              padding: 15px 32px;
+              text-align: center;
+              text-decoration: none;
+              display: inline-block;
+              font-size: 16px;
+              margin: 4px 2px;
+              cursor: pointer;
+            }
+            </style>
+    </head>
+  
+    <body>
+        
+
+        <!-- Navigation-->
+        <nav class="navbar navbar-expand-lg navbar-light bg-light">
+            <div class="container px-4 px-lg-5">
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation"><span class="navbar-toggler-icon"></span></button>
+                <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                    <ul class="navbar-nav me-auto mb-2 mb-lg-0 ms-lg-4">
+                        <li class="nav-item"><a class="nav-link active" aria-current="page" href="#!">Home</a></li>                  
+                    </ul>              
+                    <form class="container-fluid justify-content-start">
+                        <button class="btn btn-outline-success me-2" id="logout_btn" type="button">Log out</button>                       
+                      </form>
+                </div>
+            </div>
+        </nav>
+        <!-- Header-->
+        <header class="bg-dark py-5">
+            <div class="container px-4 px-lg-5 my-5">
+                <div class="text-center text-white">
+                    <h1 class="display-4 fw-bolder">Explore The Events !</h1>
+                </div>
+            </div>
+        </header>
+        <!-- Section-->
+        <section class="py-5">
+              <div class="input-group mb-3">
+                <input type="text" class="form-control" id="search_id" placeholder="Search" aria-label="Recipient's username" aria-describedby="basic-addon2">
+                <div class="input-group-append">
+                    <button class="btn btn-outline-secondary"id="search_button" type="button">Search</button>
+                </div>
+              </div>
+        </section >
+        <section class="container">
+            <h3 class="pt-4 pb-2">Filter</h3>         
+            <form>
+                <div class="row form-group">
+                    <label for="date" class="col-sm-1 col-form-label">From Date</label>
+                    <div class="col-sm-4">
+                        <div class="input-group date" id="datepicker">
+                            <input id="start_date" type="text" class="form-control">
+                            <span class="input-group-append">
+                                <span class="input-group-text bg-white d-block">
+                                    <i class="fa fa-calendar"></i>
+                                </span>
+                            </span>
+                        </div>
+                    </div>
+                </div>
+            </form>
+
+            <form>
+                <div class="row form-group">
+                    <label for="date" class="col-sm-1 col-form-label">To Date</label>
+                    <div class="col-sm-4">
+                        <div class="input-group date" id="datepickers">
+                            <input id="end_date" type="text" class="form-control">
+                            <span class="input-group-append">
+                                <span class="input-group-text bg-white d-block">
+                                    <i class="fa fa-calendar"></i>
+                                </span>
+                            </span>
+                        </div>
+                    </div>
+                </div>
+            </form>
+            
+              <div class="input-group mb-3">
+                <span class="input-group-text" id="inputGroupPrepend">Category</span>
+                <select id="category" class="form-control">
+                    <option value="" disabled selected></option>
+                    <option value="Indoor">Indoor</option>
+                    <option value="Outdoor">Outdoor</option>
+                  </select>
+
+                <div class="input-group-append">
+                    <button id="filter_button" class="btn btn-outline-secondary" type="button">Filter</button>
+                </div>
+              </div>
+        </section>
+
+
+        <section class="py-5">
+            <div class="container px-4 px-lg-5 mt-5">
+                <div class="row gx-4 gx-lg-5 row-cols-2 row-cols-md-3 row-cols-xl-4 justify-content-center">
+                    {%  for  i in results %}
+                    <div class="col mb-5">                   
+                        <div class="card h-100">
+                            <!-- Product image-->
+                            <img class="card-img-top" src={{i.image}} alt="..." />
+                            <!-- Product details-->
+                            <div class="card-body p-4">
+                                <div class="text-center">
+                                    <!-- Product name-->
+                                    <h4 class="fw-bolder">{{i.title}}</h4>
+                                    <h6 class="fw-bolder">Description :&nbsp;{{i.description}}</h6>
+                                    <h6 class="fw-bolder">location :&nbsp;{{i.location}}</h6>
+                                    <h6 class="fw-bolder">start-date :&nbsp;{{i.start_dates}}</h6>
+                                    <h6 class="fw-bolder">start-time :&nbsp;{{i.start_time}}</h6>
+                                    <h6 class="fw-bolder">end-date :&nbsp;{{i.end_dates}}</h6>
+                                    <h6 class="fw-bolder">end-time :&nbsp;{{i.end_time}}</h6>
+                                    <h6 class="fw-bolder">category :&nbsp;{{i.categories}}</h6>
+                                     {% if i.published == True %}
+                                    <h6 class="fw-bolder">Published :&nbsp;Yes</h6>
+                                    {% else %}
+                                    <h6 class="fw-bolder">Published :&nbsp;NO</h6>
+                                    {% endif %} 
+                                    {% if i.paid == True %}
+                                    <h6 class="fw-bolder">Paid :&nbsp;Yes</h6>
+                                    {% else %}
+                                    <h6 class="fw-bolder">Paid :&nbsp;NO</h6>
+                                    {% endif %}                                
+                                </div>
+                            </div>
+                            <!-- Product actions-->
+                            <div class="card-footer p-4 pt-0 border-top-0 bg-transparent">
+                                <div class="text-center">
+                                <button type="button"  onclick="Liked('{{i.id}}')"  class="btn btn-success">Like</button>
+                                <button type="button" onclick="Disliked('{{i.id}}')" class="btn btn-danger">Dislike</button>
+                            </div>
+                            </div>
+                        </div>                     
+                    </div>
+                    {% endfor %}
+
+                </div>
+            </div>
+        </section>
+
+            <nav  aria-label="Page navigation example">
+                <ul class="pagination justify-content-center "  >
+                  <li class="page-item"><a class="page-link" id="previous_id" >Previous</a></li>
+                  <li class="page-item"><a class="page-link" id="next_id" >Next</a></li>
+                </ul>
+              </nav>
+        
+        <!-- Footer-->
+        <footer class="py-5 bg-dark">
+            <div class="container"><p class="m-0 text-center text-white">Copyright @ 2021&copy; All Rights Reserved</p></div>
+        </footer>
+        <!-- Bootstrap core JS-->
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+        <!-- Core theme JS-->
+        <script src="{% static 'js/scripts.js'%}"></script>    
+        <script type="text/javascript">
+            $(function() {
+                $('#datepicker').datepicker();
+            });
+        </script>
+
+        <script type="text/javascript">
+            $(function() {
+                $('#datepickers').datepicker();
+            });
+        </script>
+
+        <script type="text/javascript">  //flag
+            document.getElementById("search_button").onclick = function () {
+                
+                var search = $("#search_id").val()
+                var data = '?search=0'.replace('0',search)
+                location.href = data
+            };
+        </script>
+
+        <script type="text/javascript">  //flag
+            document.getElementById("filter_button").onclick = function () {
+                
+                var start_date = $("#start_date").val()
+                var end_date = $("#end_date").val()
+                var category = $("#category").val()
+                if(start_date =="" | end_date==""  | category=="" )
+                {
+                    alert("please provide all the fields for filtering")
+                    return
+
+                }
+                var start_date  = start_date.replaceAll("/", "-");
+                var end_date  = end_date.replaceAll("/", "-");
+            
+                var data = "filter" +'/' + start_date +'/' + end_date +'/' + category
+                location.href = data
+            };
+        </script>
+
+
+        <script type="text/javascript">  
+            document.getElementById("next_id").onclick = function () {
+           
+                if("{{next}}" !== 'None'){
+                    location.href = "{{next}}"
+
+                }
+                               
+            };
+        </script>
+
+        <script type="text/javascript">  
+            document.getElementById("previous_id").onclick = function () {
+           
+                if("{{previous}}" !== 'None'){
+                    location.href = "{{previous}}"
+
+                }
+                               
+            };
+        </script>
+
+        <script>
+                   
+            var token = '{{csrf_token}}'
+            $(document).ready(function() {
+                $("#logout_btn").click(function() { 
+   
+                        fetch("{% url 'user-logout' %}", {
+                method: 'post',
+                headers: {
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json',"X-CSRFToken":token
+                },
+                body: JSON.stringify({
+                    "logout":"logout",
+               
+           
+                                })
+                }).then(function(res){ return res.json(); })
+                .then(function(data){          
+                    if(data.data=="True"){
+                     location.href = "{% url 'user-login' %}"
+                       
+                      
+                    }
+                    else{
+                        alert(data.message)        
+                    }
+                });
+                });
+                });
+         </script>
+
+         <script>
+            function Liked(event_id){
+              
+             
+               fetch("{% url 'like-fetcher' %}", {
+                method: 'post',
+                headers: {
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json',"X-CSRFToken":token
+                },
+                body: JSON.stringify({
+                    "event_id":event_id,
+                    "action":"like",
+               
+           
+                                })
+                }).then(function(res){ return res.json(); })
+                .then(function(data){          
+                    if(data.data=="True"){
+                     return
+                       
+                      
+                    }
+                    else{
+                        alert(data.message)        
+                    }
+                });
+            }
+
+            </script>
+
+            <script>
+                function Disliked(event_id){
+                  
+                  
+                   fetch("{% url 'like-fetcher' %}", {
+                    method: 'post',
+                    headers: {
+                        'Accept': 'application/json',
+                        'Content-Type': 'application/json',"X-CSRFToken":token
+                    },
+                    body: JSON.stringify({
+                        "event_id":event_id,
+                        "action":"dislike",
+                   
+               
+                                    })
+                    }).then(function(res){ return res.json(); })
+                    .then(function(data){          
+                        if(data.data=="True"){
+                         alert("done")
+                           
+                          
+                        }
+                        else{
+                            alert(data.message)        
+                        }
+                    });
+                }
+    
+                </script>
+
+    </body>
+</html>
